@@ -1,6 +1,8 @@
 import altair as alt
 import streamlit as st
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 import folium
 from folium.plugins import FastMarkerCluster
 from streamlit_folium import st_folium
@@ -88,45 +90,32 @@ def show_airbnb_in_map(df):
         st.map(data=positions, latitude="latitud", longitude="longitud")
 
 
-def plot_days_of_week(df, column):
+def plot_by_response_time(df):
     """
-    Visualizaciones con altair
+    Visualizaciones con Seaborn
     """
-    column.subheader("Anfitriones por tiempo de respuesta")
+    # 2 columnas donde la segunda es más ancha que la primera
+    st.subheader("Anfitriones por tiempo de respuesta")
+    column_1, column_2 = st.columns((2, 3))
+    column_1.write("DataFrame de Pandas")
+    column_2.write("Visualización con Seaborn")
 
-    grupo_contado = (
-        df.groupby("tiempo_respuesta")["anfitrión/a"]
-        .nunique()  # Cuantos datos hay sin considerar repetidos
-        .reset_index(name="Cantidad")
-    )
+    # Eliminar filas con anfitrión duplicado
+    df_sin_duplicados = df.drop_duplicates(subset=["anfitrión/a"])
 
-    tiempo_respuesta = (
-        alt.Chart(grupo_contado)
-        .mark_bar()
-        .encode(
-            x="Cantidad",
-            y=alt.Y("tiempo_respuesta:N", axis=alt.Axis(labelLimit=200)),
-        )
-    ).properties(height=300)
+    # Agrupar por anfitrión y contar
+    df_agrupado = df_sin_duplicados.groupby("tiempo_respuesta").size()
+    df_agrupado = df_agrupado.reset_index(name="Cantidad").set_index("tiempo_respuesta")
 
-    column.altair_chart(tiempo_respuesta, use_container_width=True)
+    # No poner número de línea
+    column_1.write(df_agrupado)
 
-
-def plot_airbnb_by_superhost(df, column):
-    """
-    Visualizaciones con altair
-    """
-    column.subheader("Airbnb por superhost")
-    pie = (
-        alt.Chart(df)
-        .mark_arc()
-        .encode(
-            theta="count()",
-            color=alt.Color("es_superhost:N", scale=alt.Scale(scheme="set2")),
-        )
-    ).properties(height=300, width=350)
-
-    column.altair_chart(pie)
+    fig, ax = plt.subplots()
+    sns.barplot(y="tiempo_respuesta", x="Cantidad", data=df_agrupado, ax=ax)
+    ax.set_title("Cantidad de anfitriones por tiempo de respuesta")
+    ax.set_ylabel("Tiempo de respuesta")
+    ax.set_xlabel("Cantidad de anfitriones")
+    column_2.pyplot(fig)
 
 
 def interactive_view(df):
@@ -134,6 +123,7 @@ def interactive_view(df):
     Visualizaciones interactivas con altair
     """
     st.subheader("Propiedad y servicio de aire acondicionado")
+    st.write("Puedes presionar la leyenda del _pie chart_ para filtrar los datos.")
     selection = alt.selection_point(fields=["servicio_aire_acondicionado"], bind="legend")
 
     pie = (
@@ -177,9 +167,7 @@ if __name__ == "__main__":
 
     # Gráficos
     show_airbnb_in_map(filtered_df)
-    column_1, column_2 = st.columns(2)
-    plot_days_of_week(filtered_df, column_1)
-    plot_airbnb_by_superhost(filtered_df, column_2)
+    plot_by_response_time(filtered_df)
     interactive_view(filtered_df)
 
     # Parte ML

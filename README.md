@@ -30,3 +30,10 @@ El código de este directorio está pensado para poner en práctica las funciona
 
 3. Ejecutar: `streamlit run app.py`
 
+
+## Deploy _Streamlit_
+
+En caso de subir a [Streamlit Share](https://share.streamlit.io/), ahí se ocupa formato TOML para los string, es decir, si la contraseña no es únicamente numérica, debe estar entre comillas
+
+> `CSV_PASSWORD="AIRBNB_DEMO_CLAVE_DEBES_SER_LARGA_Y_COMPLEJA_4444"`
+
