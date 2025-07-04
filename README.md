@@ -4,7 +4,8 @@ El código de este directorio está pensado para poner en práctica las funciona
 
 ## Estructura de archivos
 
-### Carpeta `utils`
+### Carpeta `utils`
+
 1. `Airbnb_Locations.csv`: _dataset_ original para desarrollar el _dashboard_.
 2. `constantes.py`: archivo .py con algunas constantes a utilizar en `app.py`
 3. `EntrenarPipeline.ipynb`: _notebook_ para entrenar modelo y guardarlo como un archivo.
