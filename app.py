@@ -22,7 +22,7 @@ def load_data(zip_filename, csv_filename):
 
     # Leer el CSV desde el ZIP con contraseña
     with zipfile.ZipFile(zip_filename) as zf:
-        with zf.open(csv_filename, pwd=zip_password.encode()) as f:
+        with zf.open(csv_filename, pwd=zip_password.encode("UTF-8")) as f:
             df = pd.read_csv(f)
 
     # Procesar el DataFrame
