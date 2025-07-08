@@ -7,6 +7,7 @@ from utils.utils import text_to_number
 
 @st.cache_data
 def load_pipeline():
+    # Cargar el modelo de ML con joblib
     return joblib.load("pipeline_model.pkl")
 
 
@@ -40,7 +41,9 @@ def predict(pipeline_loaded, info):
 
 def ml_zone(pipeline):
     """
-    Sección para modelo de ML
+    Sección para el formulario de predicción y su resultado
+    Esta sección permite al usuario ingresar datos y obtener una predicción
+    usando un modelo de Machine Learning previamente cargado.
     """
     column_1, column_2 = st.columns(2)
     column_1.subheader("Datos de entrada")
@@ -54,14 +57,16 @@ def ml_zone(pipeline):
     respuesta_box = form.selectbox("Tiempo de respuesta", C.TIEMPO_RESPUESTA)
     superhost_box = form.selectbox("Es superhost", C.SI_NO)
     propiedad_box = form.selectbox("Tipo Propiedad", C.TIPO_PROPIEDAD)
-    capacidad_slider = form.slider("Capacidad", min_value=0, max_value=16, value=5, step=1)
+    capacidad_slider = form.slider("Capacidad", min_value=1, max_value=16, value=1, step=1)
     comunicacion_slider = form.slider("Puntaje Comunicación", min_value=0, max_value=10, value=5, step=1)
-
     localizacion_slider = form.slider("Puntaje Localización", min_value=0, max_value=10, value=5, step=1)
 
     tv_cable_box = form.selectbox("Tiene TV Cable", C.SI_NO)
     aire_box = form.selectbox("Tiene Aire Acondicionado", C.SI_NO)
 
+    # Si se prsiona el botón de predecir, se ejecuta la predicción
+    # y se muestra el resultado en la segunda columna
+    # Se usa use_container_width=True para que el botón ocupe todo el ancho de la columna
     if form.form_submit_button("Predecir", use_container_width=True):
         info = [
             respuesta_box,

@@ -17,8 +17,21 @@ zip_filename = "Airbnb_Locations.zip"
 
 pyminizip.compress(csv_filename, None, zip_filename, zip_password, 9)
 
-# Probar cargar el CSV desde el ZIP con contraseña.
+
+# Probar cargar el CSV desde el ZIP
 with zipfile.ZipFile(zip_filename) as zf:
+    try:
+        print("Intentar abrir zip sin contraseña")
+        # Intentar abrir el archivo CSV sin contraseña para ver si falla
+        with zf.open(csv_filename) as f:
+            print(f.readlines()[0].decode("UTF-8"))
+    except RuntimeError:
+        print("\tNo se logró")
+
+    # Ahora abrir el archivo CSV desde el ZIP con la contraseña
+    print("Intentar abrir zip con contraseña")
     with zf.open(csv_filename, pwd=zip_password.encode("UTF-8")) as f:
-        dataset = f.readlines()
-    print(dataset[0:1])
+        print(f.readlines()[0].decode("UTF-8"))
+
+    # Luego podemos usar pandas para leer el CSV y procesarlo en el mismo código
+    # sin necesidad de descomprimirlo manualmente.
