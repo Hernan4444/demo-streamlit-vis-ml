@@ -98,7 +98,7 @@ def show_airbnb_in_map(df):
         )
     else:
         pais_seleccionado = df["pais"].unique()[0]
-        st.subheader(f"Airbnb en - {pais_seleccionado}")
+        st.subheader(f"Airbnb en {pais_seleccionado}")
         st.map(data=positions, latitude="latitud", longitude="longitud")
 
 
