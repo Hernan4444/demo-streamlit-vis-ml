@@ -10,7 +10,7 @@ El código de este directorio está pensado para poner en práctica las funciona
 2. `constantes.py`: archivo .py con algunas constantes a utilizar en `app.py`
 3. `EntrenarPipeline.ipynb`: _notebook_ para entrenar modelo y guardarlo como un archivo.
 4. `utils.py`: archivo .py con algunas funciones de utilidad a utilizar en `app.py`
-5. `guardar_csv.py`: archivo que guarda el CSV en un ZIP con una contraseña para proteger los datos.
+5. `guardar_csv.py`: archivo que utiliza la librería `pyminizip` que permite crear un zip cifrado con contraseña. Este transforma el `.csv` en un `.zip` para usar en el código principal.
 
 
 ### Código principal
